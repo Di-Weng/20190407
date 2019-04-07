@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block main_body %}
+<section class="services section-xs"  id="services">
+	<div class="container">
+        <div class="row">
+           <div class="col">
+                <form action="" method="POST" >
+                <div class="title_2">
+                  <h2>1.&nbsp挑选模型</h2>
+                    </br>
+                    <tr>
+                        <td>
+                            {% for current_model in form.model %}
+                                <h4>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ current_model }}&nbsp&nbsp&nbsp{{ current_model.label }}</h4>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </div>
+                <div class="title_2">
+                  <h2>2.&nbsp挑选方法</h2>
+                    </br>
+                    <tr>
+                        <td>
+                            {% for current_method in form.method %}
+                                <h4>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ current_method }}&nbsp&nbsp&nbsp{{ current_method.label }}</h4>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </div>
+                <div class="title_2">
+                    {{ form.csrf_token }}
+                    {{ form.submit()}}
+                </div>
+                </form>
+            </div>
+        </div>
+	</div>   	<!-- End container -->
+</section>   <!-- End section -->
+{% endblock %}
