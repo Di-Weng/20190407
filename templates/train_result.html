@@ -34,8 +34,7 @@
             <script type="text/javascript">
                 var dom = document.getElementById("regression");
                 var myChart = echarts.init(dom);
-
-                var original_data = {{ result['train_loss'] }};
+                var original_data = {{ result['train_loss']}};
 
                 var data = [];
 
@@ -113,12 +112,12 @@ myChart.setOption(option);
                 <script type="text/javascript">
     var dom = document.getElementById("classify");
     var myChart = echarts.init(dom);
-    var axis_data = [];
+    var j_original_result = {{ result|tojson }};
+    var axis_data = j_original_result['fault_list'];
     var max_data = 0;
     var heat_data = {{result['heatmap']}};
     var class_number = {{ result['class_number'] }}
     for (var i = 0; i < class_number; i++) {
-        axis_data.push(i);
         for (var j = 0; j < class_number; j++){
             if(heat_data[i+j][2]>max_data){
                 max_data=heat_data[i+j][2]
@@ -130,13 +129,14 @@ myChart.setOption(option);
     });
 option = {
     title: {
-        text: '混淆矩阵热力图',
+        text: '故障矩阵热力图',
         left: 'center',
     },
     tooltip: {
         position: 'top',
         formatter: function (params) {
-            return '预测类'+params.value[0]+' 实际类'+params.value[1]+' 预测值：'+params.value[2]
+            return '预测故障:'+axis_data[params.value[0]]+'<br/>实际故障:'+axis_data[params.value[1]]+'<br/>数量：'+params.value[2];
+            {#return alert(JSON.stringify(params));#}
         },
     },
     animation: false,

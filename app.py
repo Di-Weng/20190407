@@ -1,10 +1,11 @@
-from flask import Flask,render_template,redirect,url_for
+from flask import Flask,render_template,redirect,url_for,jsonify
 from flask_wtf import FlaskForm
 from wtforms.fields import RadioField,SubmitField
 import random
 from wtforms.validators import DataRequired
-
+import json
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 app.config['SECRET_KEY'] = '123456'
 
 class TrainForm(FlaskForm):
@@ -48,18 +49,20 @@ def train_result(model_method):
         result_dic['recall'] = 0.71
         return render_template('train_result.html', result=result_dic)
     elif (result_dic['type'] == '分类'):
-        class_number = 3
+        fault_list = ['传感器子系统','CPU','电路板','外部执行器','内部执行器']
+        class_number = len(fault_list)
         result_dic['heatmap']=[]
         #每[行,列,数量]代表预测值
         for i in range(class_number):
             for j in range(class_number):
                 result_dic['heatmap'].append([i,j,random.randint(1,100)])
         result_dic['class_number'] = class_number
-        print(result_dic)
+        result_dic['fault_list'] = fault_list
+
         result_dic['accuracy'] = 0.7
         result_dic['precision'] = 0.83
         result_dic['recall'] = 0.71
-        print(result_dic)
+
         return render_template('train_result.html', result=result_dic)
 
 if __name__ == '__main__':
