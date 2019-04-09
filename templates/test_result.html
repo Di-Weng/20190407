@@ -2,7 +2,7 @@
 {% block main_body %}
 <section class="services section-xs"  id="services">
 	<div class="container">
-        {% if result["type"]=='回归'%}
+{% if result["type"]=='回归'%}
         <center><h2>结果</h2></center>
         <div class="gitlabel-container">
 <!--加修饰-->
@@ -176,107 +176,13 @@ myChart.setOption(option);
             };
         myChart.setOption(option)
 </script>
-
-    
-
-</div>   	<!-- End container -->
-</section>   <!-- End section -->
-<script type="text/javascript">
-var dom = document.getElementById("accuracy");
-var myChart = echarts.init(dom);
-var accuracy = {{ result['accuracy'] }};
-
-option = {
-textStyle: {
-    fontWeight: 'bolder',
-    fontSize: 15,
-},
-tooltip : {
-    formatter: "{a} <br/>{b} : {c}%"
-},
-toolbox: {
-    show:false,
-},
-series: [
-    {
-        name: 'Accuracy',
-        type: 'gauge',
-        min: 0,
-        max: 1,
-        detail: {formatter:'{value}%'},
-        data: [{value: accuracy, name: 'Accuracy'}]
-    }
-]
-};
+{% elif result["type"]=='分类'%}
 
 
-myChart.setOption(option);
-</script>
-<script type="text/javascript">
-var dom = document.getElementById("precision");
-var myChart = echarts.init(dom);
 
-var precision = {{ result['precision'] }};
-
-option = {
-textStyle: {
-    fontWeight: 'bolder',
-    fontSize: 15,
-},
-tooltip : {
-    formatter: "{a} <br/>{b} : {c}%"
-},
-toolbox: {
-    show:false,
-},
-series: [
-    {
-        name: 'precision',
-        type: 'gauge',
-        min: 0,
-        max: 1,
-        detail: {formatter:'{value}%'},
-        data: [{value: precision, name: 'Precision'}]
-    }
-]
-};
-
-
-myChart.setOption(option);
-</script>
-<script type="text/javascript">
-var dom = document.getElementById("recall");
-var myChart = echarts.init(dom);
-
-var recall = {{ result['recall'] }};
-
-option = {
-textStyle: {
-    fontWeight: 'bolder',
-    fontSize: 15,
-},
-tooltip : {
-    formatter: "{a} <br/>{b} : {c}%"
-},
-toolbox: {
-    show:false,
-},
-series: [
-    {
-        name: 'recall',
-        type: 'gauge',
-        min: 0,
-        max: 1,
-        detail: {formatter:'{value}%'},
-        data: [{value: recall, name: 'Recall'}]
-    }
-]
-};
-
-
-myChart.setOption(option);
-</script>
 {% else %}
 <p>方法类型不对</p>
 {% endif %}
+</div>   	<!-- End container -->
+</section>   <!-- End section -->
 {% endblock %}
