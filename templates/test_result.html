@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+{% block main_body %}
+<section class="services section-xs"  id="services">
+	<div class="container">
+        {% if result["type"]=='回归'%}
+        <center><h2>结果</h2></center>
+        <div class="gitlabel-container">
+<!--加修饰-->
+        <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;特征
+            {% for i in result['features_name'] %}
+            <a class='gitlabel' href=#>{{i}}</a>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div id="features-bar" class="center"></div>
+        </div>
+        <div class="row">
+                <div id="distrbution" class="center"></div>
+            </div>
+        <script type="text/javascript">
+            var dom = document.getElementById("features-bar");
+            var myChart = echarts.init(dom);
+
+            var original_data = {{ result['features_value'] }};
+            var max = original_data[0];
+            for(var i = 0;i<original_data.length;i++){
+                if(original_data[i]>max){
+                    max = original_data[i];
+                }
+            }
+            console.log(max)
+            for(var i = 0;i<original_data.length;i++){
+                original_data[i] = original_data[i]/max
+            }
+            var title_data = {{ result['features_name']|tojson}};
+
+            var data = [];
+
+            x_data = [];
+            for (var i = 0; i < original_data.length; i++) {
+                x_data.push(i)
+            }
+
+            option = {
+                title: {
+                    text: '单特征寿命预测',
+                    left: 'center',
+                },
+                tooltip: {
+                    position: 'top',
+                    formatter: function (params) {
+                        return "特征 " + params.name + ' 预测寿命:'+params.value.toFixed(2)
+                    },
+                },
+                xAxis: {
+                    type: 'value',
+                    name: '寿命预测',
+                    nameTextStyle :{
+                        fontSize: 20,
+                        },
+                },
+                yAxis: [{
+                    type: 'category',
+                    name: '特征',
+                    nameTextStyle :{
+                        fontSize: 20,
+                        },
+                    data: title_data,
+                    axisLabel: {
+                        formatter: function(value,index){
+                            return '{table|' + value +'}';
+                        },
+                        rich: {
+                            table : {
+                                fontSize: 20,
+                                borderColor: "#000000",
+                                align: 'center',
+                                }
+                            },
+                    }
+                }]
+                ,
+                series: [{
+                    data: original_data,
+                    type: 'bar',
+                    barCategoryGap: '0%',
+                }]
+            };
+myChart.setOption(option);
+        </script>
+        
+        <script>
+            var dom = document.getElementById("distrbution");
+            var myChart = echarts.init(dom);
+            var original_data = {{ result['features_value'] }} ;
+            // See https://github.com/ecomfe/echarts-stat
+            var bins = ecStat.histogram(original_data);
+            
+            var interval;
+            var min = Infinity;
+            var max = -Infinity;
+            
+            data = echarts.util.map(bins.data, function (item, index) {
+                var x0 = bins.bins[index].x0;
+                var x1 = bins.bins[index].x1;
+                interval = x1 - x0;
+                min = Math.min(min, x0);
+                max = Math.max(max, x1);
+                return [x0, x1, item[1]];
+            });
+            
+            function renderItem(params, api) {
+                var yValue = api.value(2);
+                var start = api.coord([api.value(0), yValue]);
+                var size = api.size([api.value(1) - api.value(0), yValue]);
+                var style = api.style();
+            
+                return {
+                    type: 'rect',
+                    shape: {
+                        x: start[0] + 1,
+                        y: start[1],
+                        width: size[0] - 2,
+                        height: size[1]
+                    },
+                    style: style
+                };
+            }
+            
+            option = {
+                title: {
+                    text: '寿命分布直方图',
+                    left: 'center',
+                    top: 10
+                },
+                grid: {
+                    top: 80,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'value',
+                    name: '寿命区间',
+                    min: min,
+                    max: max,
+                    interval: interval
+                }],
+                yAxis: [{
+                    name: '数量',
+                    type: 'value',
+                }],
+                tooltip: {
+                    position: 'top',
+                    formatter: function (params) {
+                        console.log(params)
+                        return '区间:' + params.value[0] + "-" + params.value[1] + '\n分布数量' +params.value[2]
+                    }
+                },
+                series: [{
+                    name: 'height',
+                    type: 'custom',
+                    renderItem: renderItem,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideTop'
+                        }
+                    },
+                    encode: {
+                        x: [0, 1],
+                        y: 2,
+                        tooltip: 1,
+                        label: 2
+                    },
+                    data: data
+                }]
+            };
+        myChart.setOption(option)
+</script>
+
+    
+
+</div>   	<!-- End container -->
+</section>   <!-- End section -->
+<script type="text/javascript">
+var dom = document.getElementById("accuracy");
+var myChart = echarts.init(dom);
+var accuracy = {{ result['accuracy'] }};
+
+option = {
+textStyle: {
+    fontWeight: 'bolder',
+    fontSize: 15,
+},
+tooltip : {
+    formatter: "{a} <br/>{b} : {c}%"
+},
+toolbox: {
+    show:false,
+},
+series: [
+    {
+        name: 'Accuracy',
+        type: 'gauge',
+        min: 0,
+        max: 1,
+        detail: {formatter:'{value}%'},
+        data: [{value: accuracy, name: 'Accuracy'}]
+    }
+]
+};
+
+
+myChart.setOption(option);
+</script>
+<script type="text/javascript">
+var dom = document.getElementById("precision");
+var myChart = echarts.init(dom);
+
+var precision = {{ result['precision'] }};
+
+option = {
+textStyle: {
+    fontWeight: 'bolder',
+    fontSize: 15,
+},
+tooltip : {
+    formatter: "{a} <br/>{b} : {c}%"
+},
+toolbox: {
+    show:false,
+},
+series: [
+    {
+        name: 'precision',
+        type: 'gauge',
+        min: 0,
+        max: 1,
+        detail: {formatter:'{value}%'},
+        data: [{value: precision, name: 'Precision'}]
+    }
+]
+};
+
+
+myChart.setOption(option);
+</script>
+<script type="text/javascript">
+var dom = document.getElementById("recall");
+var myChart = echarts.init(dom);
+
+var recall = {{ result['recall'] }};
+
+option = {
+textStyle: {
+    fontWeight: 'bolder',
+    fontSize: 15,
+},
+tooltip : {
+    formatter: "{a} <br/>{b} : {c}%"
+},
+toolbox: {
+    show:false,
+},
+series: [
+    {
+        name: 'recall',
+        type: 'gauge',
+        min: 0,
+        max: 1,
+        detail: {formatter:'{value}%'},
+        data: [{value: recall, name: 'Recall'}]
+    }
+]
+};
+
+
+myChart.setOption(option);
+</script>
+{% else %}
+<p>方法类型不对</p>
+{% endif %}
+{% endblock %}
