@@ -6,95 +6,67 @@
         <center><h2>结果</h2></center>
         <div class="gitlabel-container">
 <!--加修饰-->
-        <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;特征
+        <p >&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <font color='#000000'><strong>特征:</strong></font>
             {% for i in result['features_name'] %}
             <a class='gitlabel' href=#>{{i}}</a>
             {% endfor %}
         </div>
         <div class="row">
-            <div id="features-bar" class="center"></div>
+            <div id="features-bar" class="center" >
+            <table name='tb' class="center" style='height:70%'>
+                <tbody id= 'tbody1'>
+                </tbody>
+            </table>
+            </div>
         </div>
         <div class="row">
-                <div id="distrbution" class="center"></div>
+                <div id="distrbution" class="center" style = "width: 40%"></div>
             </div>
-        <script type="text/javascript">
-            var dom = document.getElementById("features-bar");
-            var myChart = echarts.init(dom);
-
-            var original_data = {{ result['features_value'] }};
+        <script type='text/javascript'>
+            window.onload= function(){
+            var table = document.getElementById('features-bar');
+            var original_data = {{ result['result'] }};
+            var title_data = {{ result['features_name']|tojson}};
+            var feature_data = {{result['features_value']}}
             var max = original_data[0];
             for(var i = 0;i<original_data.length;i++){
                 if(original_data[i]>max){
                     max = original_data[i];
                 }
             }
-            console.log(max)
             for(var i = 0;i<original_data.length;i++){
                 original_data[i] = original_data[i]/max
             }
-            var title_data = {{ result['features_name']|tojson}};
+            var data = Array();
 
-            var data = [];
-
-            x_data = [];
-            for (var i = 0; i < original_data.length; i++) {
-                x_data.push(i)
+            for(var i =0;i<original_data.length;i++){
+                data.push({feature:title_data,value:original_data[i]})
             }
-
-            option = {
-                title: {
-                    text: '单特征寿命预测',
-                    left: 'center',
-                },
-                tooltip: {
-                    position: 'top',
-                    formatter: function (params) {
-                        return "特征 " + params.name + ' 预测寿命:'+params.value.toFixed(2)
-                    },
-                },
-                xAxis: {
-                    type: 'value',
-                    name: '寿命预测',
-                    nameTextStyle :{
-                        fontSize: 20,
-                        },
-                },
-                yAxis: [{
-                    type: 'category',
-                    name: '特征',
-                    nameTextStyle :{
-                        fontSize: 20,
-                        },
-                    data: title_data,
-                    axisLabel: {
-                        formatter: function(value,index){
-                            return '{table|' + value +'}';
-                        },
-                        rich: {
-                            table : {
-                                fontSize: 20,
-                                borderColor: "#000000",
-                                align: 'center',
-                                }
-                            },
-                    }
-                }]
-                ,
-                series: [{
-                    data: original_data,
-                    type: 'bar',
-                    barCategoryGap: '0%',
-                }]
+            var table_insert = "<tr><th colspan='"+feature_data[0].length+"''>特征名</th><th>特征寿命</th></tr>"
+            table_insert +="<tr>";
+            for(var i=0;i<data[0].feature.length;i++){
+                table_insert += "<td>"+data[0].feature[i]+"</td>";
+            }
+            table_insert += "</tr>"
+            for(var i=0;i<data.length;i++){
+                table_insert += "<tr>"
+                for(var j=0;j<data[i].feature.length;j++){
+                    table_insert += "<td style='width:5%; background-color: rgb("+feature_data[i][j]*50+","+feature_data[i][j]*30+","+feature_data[i][j]*40+")'>"+feature_data[i][j] +"</td>"
+                }
+                table_insert +="<td><div style='background-color: #D52B2B; width:"  + data[i].value*100 +"%; height: 100%';></div></td></tr>"
             };
-myChart.setOption(option);
+            console.log(table_insert);
+            $("#tbody1").html(table_insert);
+        };
         </script>
         
         <script>
             var dom = document.getElementById("distrbution");
             var myChart = echarts.init(dom);
-            var original_data = {{ result['features_value'] }} ;
+            var original_data = {{ result['result'] }} ;
             // See https://github.com/ecomfe/echarts-stat
-            var bins = ecStat.histogram(original_data);
+            var bins = ecStat.histogram(original_data,'freedmanDiaconis');
             
             var interval;
             var min = Infinity;

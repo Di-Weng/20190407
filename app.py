@@ -76,8 +76,9 @@ def train_result(model_method,task):
         result_dic['accuracy'] = 0.7
         result_dic['precision'] = 0.83
         result_dic['recall'] = 0.71
-        result_dic['features_name'] = ['a','b','c','d','e','f','g','h','i']
-        result_dic['features_value'] =[1,2,3,4,5,6,8.7,4.6,8.6]
+        result_dic['features_name'] = ['a','b','c','d','e']
+        result_dic['result'] =[1,2,3,4,5,5.5,3,4,7.8]
+        result_dic['features_value'] = [[1,2,3,4,5],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2]]
         if task=='train':
             return render_template('train_result.html', result=result_dic)
         elif task=='test':
