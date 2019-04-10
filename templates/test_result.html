@@ -52,7 +52,7 @@
             for(var i=0;i<data.length;i++){
                 table_insert += "<tr>"
                 for(var j=0;j<data[i].feature.length;j++){
-                    table_insert += "<td style='width:5%; background-color: rgb("+feature_data[i][j]*50+","+feature_data[i][j]*30+","+feature_data[i][j]*40+")'>"+feature_data[i][j] +"</td>"
+                    table_insert += "<td style='width:5%; background-color: rgb("+(feature_data[i][j]*50)%255+",100,100)'>"+feature_data[i][j] +"</td>"
                 }
                 table_insert +="<td><div style='background-color: #D52B2B; width:"  + data[i].value*100 +"%; height: 100%';></div></td></tr>"
             };
