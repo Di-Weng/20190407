@@ -65,5 +65,12 @@ def train_result(model_method):
 
         return render_template('train_result.html', result=result_dic)
 
+@app.route('/regression_test/')
+def regression_test():
+    result_dic = {}
+    result_dic['distribution'] = [0.1,0.2,0.3,0.2,0.2]
+    result_dic['loss'] = 40
+    return render_template('regression_test.html',result = result_dic)
+
 if __name__ == '__main__':
     app.run()

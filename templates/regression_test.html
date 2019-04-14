@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% block main_body %}
+<section class="services section-xs"  id="services">
+    <div class="container">
+        <h4 align = "center">故障分类</h4>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="service-block color-bg text-center">
+                <table border="0"  style='width:100%'>
+                    <tr>
+                        <td align = "center">特征1</td>
+                        <td align = "center">特征2</td>
+                        <td align = "center">特征3</td>
+                        <td align = "center">特征4</td>
+                        <td align = "center">特征5</td>
+                        <td align = "center">特征6</td>
+                        <td align = "center">其它特征</td>
+                        <td align = "center">故障分类</td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#fef0d9">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdbb84">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fc8d59">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdd49e">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#ef6548">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#d7301f">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td align = "center">....</td>
+                        <td align = "center">传感器</td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#fc8d59">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#d7301f">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#ef6548">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fef0d9">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdbb84">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdd49e">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td align = "center">....</td>
+                        <td align = "center">CPU</td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#d7301f">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdd49e">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdbb84">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fc8d59">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fef0d9">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#ef6548">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td align = "center">....</td>
+                        <td align = "center">电路板</td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#fdd49e">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fef0d9">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#ef6548">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdbb84">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#d7301f">&nbsp;&nbsp;&nbsp;&nbsp;</td>              
+                        <td bgcolor="#fc8d59">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td align = "center">....</td>
+                        <td align = "center">传感器</td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#fdbb84">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdd49e">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fef0d9">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#ef6548">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#d7301f">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fc8d59">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td align = "center">....</td>
+                        <td align = "center">外部执行器</td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#ef6548">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdbb84">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#d7301f">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fdd49e">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fef0d9">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td bgcolor="#fc8d59">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td align = "center">....</td>                
+                        <td align = "center">内部执行器</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- End Single Service Item -->
+
+        <h4 align = "center">故障分布</h4>
+        <!-- Single Service Item -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="service-block color-bg text-center">
+                <div id="distribution" class="center"></div>
+            </div>
+        </div>
+        <!-- End Single Service Item -->
+       
+        <h4 align = "center">loss</h4>
+        <!-- Single Service Item -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="service-block color-bg text-center">
+                    <div id="loss" class="center"></div>
+            </div>
+        </div>
+        <!-- End Single Service Item -->
+
+
+        <script type="text/javascript">
+            var dom = document.getElementById("distribution");
+            var myChart = echarts.init(dom);
+            var original_data = {{result["distribution"]}};
+            var x_axis = ['传感器子系统','CPU','电路板','外部执行器','内部执行器'];
+            var data = [];
+            option = {
+                tooltip : {
+                    trigger: 'axis'
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : x_axis
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        type : 'bar',
+                        data:original_data
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        </script>
+
+        <script type="text/javascript">
+            var dom = document.getElementById("loss");
+            var myChart = echarts.init(dom);
+            var original_data = {{result["loss"]}};
+            var path = 'path://M-244.396,44.399c0,0,0.47-2.931-2.427-6.512c2.819-8.221,3.21-15.709,3.21-15.709s5.795,1.383,5.795,7.325C-237.818,39.679-244.396,44.399-244.396,44.399z M-260.371,40.827c0,0-3.881-12.946-3.881-18.319c0-2.416,0.262-4.566,0.669-6.517h17.684c0.411,1.952,0.675,4.104,0.675,6.519c0,5.291-3.87,18.317-3.87,18.317H-260.371z M-254.745,18.951c-1.99,0-3.603,1.676-3.603,3.744c0,2.068,1.612,3.744,3.603,3.744c1.988,0,3.602-1.676,3.602-3.744S-252.757,18.951-254.745,18.951z M-255.521,2.228v-5.098h1.402v4.969c1.603,1.213,5.941,5.069,7.901,12.5h-17.05C-261.373,7.373-257.245,3.558-255.521,2.228zM-265.07,44.399c0,0-6.577-4.721-6.577-14.896c0-5.942,5.794-7.325,5.794-7.325s0.393,7.488,3.211,15.708C-265.539,41.469-265.07,44.399-265.07,44.399z M-252.36,45.15l-1.176-1.22L-254.789,48l-1.487-4.069l-1.019,2.116l-1.488-3.826h8.067L-252.36,45.15z';
+
+            option = {
+                color: ['#bb0004', '#ccc'],
+                xAxis: {
+                    data: [
+                        '',
+                    ],
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        interval: 0
+                    }
+                },
+                yAxis: {
+                    max: 100,
+                    splitLine: {show: false}
+                },
+                series: [{
+                    // This series represents real value.
+                    type: 'pictorialBar',
+                    name: 'realValue',
+                    symbol: path,
+                    // 'real value' series should has higher z than 'background'
+                    // series.
+                    z: 10,
+                    // When there is another series used as the background of
+                    // this series, it is recommended that assign
+                    // symbolBoundingData the same value in 'realValue' series
+                    // and 'background' series.
+                    symbolBoundingData: 100,
+                    data: [{
+                        value: original_data,
+                        symbolClip: true,
+                        symbolSize: [
+                            "50%", 
+                            "100%" 
+                        ],
+
+                    }]
+                }, {
+                    // This series is used as background.
+                    type: 'pictorialBar',
+                    name: 'background',
+                    symbol: path,
+                    // When a series is used as background, it is recommended
+                    // that assign symbolBoundingData the same value in
+                    // 'realValue' series and 'background' series.
+                    symbolBoundingData: 100,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'outside',
+                            formatter: 'value: {c}',
+                            textStyle: {
+                                color: '#bb0004'
+                            }
+                        }
+                    },
+                    data: [{
+                        value: original_data,
+                        symbolSize: [
+                            "50%", 
+                            "100%" 
+                        ],
+                        // When a series is used as background and symbolClip
+                        // is used in 'realValue' series, it is recommended that
+                        // set animationDuration to be zero, which disables
+                        // initial aniation, and keeps update animation enabled.
+                        animationDuration: 0
+                    }]
+                }]
+            };
+            myChart.setOption(option);
+        </script>
+
+    </div>      <!-- End container -->
+</section>    <!-- End section -->
+{% endblock %}
