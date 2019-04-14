@@ -106,7 +106,7 @@ def test_result(model_method):
     # 得到结果数据
 
     # 判断结果是分类还是回归
-    result_dic['type']='回归'
+    result_dic['type']='分类'
     if(result_dic['type']=='回归'):
         result_dic['train_loss'] = [8.8, 8.6, 5.4, 6.2, 3.6, 4.2, 3.8, 2.1, 1.1]
         result_dic['accuracy'] = 0.7
@@ -117,19 +117,7 @@ def test_result(model_method):
         result_dic['features_value'] = [[1,2,3,4,5],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2]]
         return render_template('test_result.html',result=result_dic)
     elif (result_dic['type'] == '分类'):
-        fault_list = ['传感器子系统','CPU','电路板','外部执行器','内部执行器']
-        class_number = len(fault_list)
-        result_dic['heatmap']=[]
-        #每[行,列,数量]代表预测值
-        for i in range(class_number):
-            for j in range(class_number):
-                result_dic['heatmap'].append([i,j,random.randint(1,100)])
-        result_dic['class_number'] = class_number
-        result_dic['fault_list'] = fault_list
-        result_dic['accuracy'] = 0.7
-        result_dic['precision'] = 0.83
-        result_dic['recall'] = 0.71
-        return render_template('test_result.html',result=result_dic)
+        return redirect(url_for('regression_test'))
     
 
 @app.route('/regression_test/')
