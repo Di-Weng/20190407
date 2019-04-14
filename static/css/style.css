@@ -4,10 +4,28 @@ body {
   font-family: "Titillium Web", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-
+.gitlabel-container {
+	width: 100%;
+    align-items: baseline;
+    display: inline-flex;
+    flex-wrap: wrap;
+    display: table-cell;
+  	text-align: center;
+  	vertical-align: middle;
+  	margin:0 auto;
+}
+.gitlabel {
+    background-color: #ffecaa;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 0 .5em .5em 0;
+    padding: .3em .9em;
+    white-space: nowrap;
+    color: #000;
+}
 p {
   font-family: "Titillium Web", sans-serif;
-  color: #9a9a9a;
+  color: #000000;
   font-size: 15px;
 }
 

@@ -136,7 +136,7 @@ option = {
         position: 'top',
         formatter: function (params) {
             return '预测故障:'+axis_data[params.value[0]]+'<br/>实际故障:'+axis_data[params.value[1]]+'<br/>数量：'+params.value[2];
-            {#return alert(JSON.stringify(params));#}
+            {# return alert(JSON.stringify(params)); #}
         },
     },
     animation: false,
@@ -203,7 +203,7 @@ myChart.setOption(option);
         fontSize: 15,
     },
     tooltip : {
-        formatter: "{a} <br/>{b} : {c}%"
+        formatter: function (params) {return params.name+ " <br/>" +params.name+" : "+params.value*100+"%"}
     },
     toolbox: {
         show:false,
@@ -214,7 +214,9 @@ myChart.setOption(option);
             type: 'gauge',
             min: 0,
             max: 1,
-            detail: {formatter:'{value}%'},
+            detail: {formatter:function (params){
+                return params*100 + "%"
+            }},
             data: [{value: accuracy, name: 'Accuracy'}]
         }
     ]
@@ -235,7 +237,7 @@ myChart.setOption(option);
         fontSize: 15,
     },
     tooltip : {
-        formatter: "{a} <br/>{b} : {c}%"
+        formatter: function (params) {return params.name+ " <br/>" +params.name+" : "+params.value*100+"%"}
     },
     toolbox: {
         show:false,
@@ -246,7 +248,9 @@ myChart.setOption(option);
             type: 'gauge',
             min: 0,
             max: 1,
-            detail: {formatter:'{value}%'},
+            detail: {formatter:function (params){
+                return params*100 + "%"
+            }},
             data: [{value: precision, name: 'Precision'}]
         }
     ]
@@ -267,7 +271,7 @@ myChart.setOption(option);
         fontSize: 15,
     },
     tooltip : {
-        formatter: "{a} <br/>{b} : {c}%"
+        formatter: function (params) {return params.name+ " <br/>" +params.name+" : "+params.value*100+"%"}
     },
     toolbox: {
         show:false,
@@ -278,7 +282,9 @@ myChart.setOption(option);
             type: 'gauge',
             min: 0,
             max: 1,
-            detail: {formatter:'{value}%'},
+            detail: {formatter:function (params){
+                return params*100 + "%"
+            }},
             data: [{value: recall, name: 'Recall'}]
         }
     ]

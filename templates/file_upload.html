@@ -4,7 +4,7 @@
 	<div class="container">
         <div class="row">
            <div class="col">
-                <form action="" method="POST" >
+                <form action="" method="POST" enctype="multipart/form-data">
                 <div class="title_2">
                   <h2>1.&nbsp挑选模型</h2>
                     </br>
@@ -27,11 +27,16 @@
                         </td>
                     </tr>
                 </div>
+                <div class='title_2'>
+                        <h2>3.&nbsp挑选文件</h2>
+                    </br>
+                    {{form.file()}}
+                </div>
                 <div class="title_2">
-                    
                     {{ form.csrf_token }}
                     {{ form.submit()}}
                 </div>
+
                 </form>
             </div>
         </div>

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block main_body %}
+<section class="services section-xs"  id="services">
+	<div class="container">
+{% if result["type"]=='回归'%}
+        <center><h2>结果</h2></center>
+        <div class="gitlabel-container">
+<!--加修饰-->
+        <p >&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <font color='#000000'><strong>特征:</strong></font>
+            {% for i in result['features_name'] %}
+            <a class='gitlabel' href=#>{{i}}</a>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div id="features-bar" class="center" >
+            <table name='tb' class="center" style='height:70%'>
+                <tbody id= 'tbody1'>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="row">
+                <div id="distrbution" class="center" style = "width: 40%"></div>
+            </div>
+        <script type='text/javascript'>
+            window.onload= function(){
+            var table = document.getElementById('features-bar');
+            var original_data = {{ result['result'] }};
+            var title_data = {{ result['features_name']|tojson}};
+            var feature_data = {{result['features_value']}}
+            var max = original_data[0];
+            for(var i = 0;i<original_data.length;i++){
+                if(original_data[i]>max){
+                    max = original_data[i];
+                }
+            }
+            for(var i = 0;i<original_data.length;i++){
+                original_data[i] = original_data[i]/max
+            }
+            var data = Array();
+
+            for(var i =0;i<original_data.length;i++){
+                data.push({feature:title_data,value:original_data[i]})
+            }
+            var table_insert = "<tr><th colspan='"+feature_data[0].length+"''>特征名</th><th>特征寿命</th></tr>"
+            table_insert +="<tr>";
+            for(var i=0;i<data[0].feature.length;i++){
+                table_insert += "<td>"+data[0].feature[i]+"</td>";
+            }
+            table_insert += "</tr>"
+            for(var i=0;i<data.length;i++){
+                table_insert += "<tr>"
+                for(var j=0;j<data[i].feature.length;j++){
+                    table_insert += "<td style='width:5%; background-color: rgb("+(feature_data[i][j]*50)%255+",100,100)'>"+feature_data[i][j] +"</td>"
+                }
+                table_insert +="<td><div style='background-color: #D52B2B; width:"  + data[i].value*100 +"%; height: 100%';></div></td></tr>"
+            };
+            console.log(table_insert);
+            $("#tbody1").html(table_insert);
+        };
+        </script>
+        
+        <script>
+            var dom = document.getElementById("distrbution");
+            var myChart = echarts.init(dom);
+            var original_data = {{ result['result'] }} ;
+            // See https://github.com/ecomfe/echarts-stat
+            var bins = ecStat.histogram(original_data,'freedmanDiaconis');
+            
+            var interval;
+            var min = Infinity;
+            var max = -Infinity;
+            
+            data = echarts.util.map(bins.data, function (item, index) {
+                var x0 = bins.bins[index].x0;
+                var x1 = bins.bins[index].x1;
+                interval = x1 - x0;
+                min = Math.min(min, x0);
+                max = Math.max(max, x1);
+                return [x0, x1, item[1]];
+            });
+            
+            function renderItem(params, api) {
+                var yValue = api.value(2);
+                var start = api.coord([api.value(0), yValue]);
+                var size = api.size([api.value(1) - api.value(0), yValue]);
+                var style = api.style();
+            
+                return {
+                    type: 'rect',
+                    shape: {
+                        x: start[0] + 1,
+                        y: start[1],
+                        width: size[0] - 2,
+                        height: size[1]
+                    },
+                    style: style
+                };
+            }
+            
+            option = {
+                title: {
+                    text: '寿命分布直方图',
+                    left: 'center',
+                    top: 10
+                },
+                grid: {
+                    top: 80,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'value',
+                    name: '寿命区间',
+                    min: min,
+                    max: max,
+                    interval: interval
+                }],
+                yAxis: [{
+                    name: '数量',
+                    type: 'value',
+                }],
+                tooltip: {
+                    position: 'top',
+                    formatter: function (params) {
+                        console.log(params)
+                        return '区间:' + params.value[0] + "-" + params.value[1] + '\n分布数量' +params.value[2]
+                    }
+                },
+                series: [{
+                    name: 'height',
+                    type: 'custom',
+                    renderItem: renderItem,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideTop'
+                        }
+                    },
+                    encode: {
+                        x: [0, 1],
+                        y: 2,
+                        tooltip: 1,
+                        label: 2
+                    },
+                    data: data
+                }]
+            };
+        myChart.setOption(option)
+</script>
+{% elif result["type"]=='分类'%}
+
+
+
+{% else %}
+<p>方法类型不对</p>
+{% endif %}
+</div>   	<!-- End container -->
+</section>   <!-- End section -->
+{% endblock %}
