@@ -55,7 +55,7 @@
   Start Preloader
   ==================================== -->
 
-  <!--<div id="preloader">
+  <div id="preloader">
    <div class="preloader">
      <div class="sk-circle1 sk-child"></div>
      <div class="sk-circle2 sk-child"></div>
@@ -70,7 +70,7 @@
      <div class="sk-circle11 sk-child"></div>
      <div class="sk-circle12 sk-child"></div>
    </div>
- </div>--> 
+ </div>
    <!--
   End Preloader
   ==================================== -->
@@ -83,17 +83,17 @@ Fixed Navigation
 ==================================== -->
 <section class="header  navigation">
    <div class="container">
-      <div class="row">
+      <div class="row" >
          <div class="col-md-12">
             <nav class="navbar navbar-expand-md">
                <a class="navbar-brand" href="{{ url_for('train') }}">
-                  <img src="/static/images/logo.png" alt="logo">
+                  <img src="/static/images/logo5.png" alt="logo">
                </a>  
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                <span class="tf-ion-android-menu"></span>
             </button>
-         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
+         <div class="collapse navbar-collapse" id="navbarSupportedContent" style='margin:0 auto;'>
+            <ul class="navbar-nav ml-auto" id='navbar'>
                <li class="nav-item active">
                   <a class="nav-link" href="{{ url_for('train') }}">训练<span class="sr-only">(current)</span></a>
                </li>
