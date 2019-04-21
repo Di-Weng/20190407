@@ -27,7 +27,7 @@ class TestForm(FlaskForm):
 @app.route('/',methods=['POST','GET'])
 def train():
     train_form = TrainForm()
-    train_form.model.choices = [('1','模型1'),('2','模型2'),('3','模型3')]
+    train_form.model.choices = [('1','模型1(回归)'),('2','模型2(分类)'),('3','模型3(分类)')]
     train_form.method.choices = [('1','方法1'),('2','方法2'),('3','方法3')]
     if train_form.validate_on_submit():
         model_choice = train_form.model.data
@@ -43,7 +43,7 @@ def train():
 @app.route('/test',methods=['POST','GET'])
 def test():
     test_form = TestForm()
-    test_form.model.choices = [('1','模型1'),('2','模型2'),('3','模型3')]
+    test_form.model.choices = [('1','模型1(回归)'),('2','模型2(分类)'),('3','模型3(分类)')]
     test_form.method.choices = [('1','方法1'),('2','方法2'),('3','方法3')]
     if test_form.validate_on_submit():
 
@@ -64,23 +64,22 @@ def test():
 @app.route('/train_result/<model_method>')
 def train_result(model_method):
     #model_method=[模型序号,方法序号]
-    print(model_method)
-
     result_dic={}
+    print(model_method)
     # 得到结果数据
-
+    result_dic['train_loss'] = [8.8, 8.6, 5.4, 6.2, 3.6, 4.2, 3.8, 2.1, 1.1]
+    result_dic['accuracy'] = 0.7
+    result_dic['precision'] = 0.83
+    result_dic['recall'] = 0.71
+    result_dic['features_name'] = ['a','b','c','d','e']
+    result_dic['result'] =[1,2,3,4,5,5.5,3,4,7.8]
+    result_dic['features_value'] = [[1,2,3,4,5],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2]]
     # 判断结果是分类还是回归
-    result_dic['type']='回归'
-    if(result_dic['type']=='回归'):
-        result_dic['train_loss'] = [8.8, 8.6, 5.4, 6.2, 3.6, 4.2, 3.8, 2.1, 1.1]
-        result_dic['accuracy'] = 0.7
-        result_dic['precision'] = 0.83
-        result_dic['recall'] = 0.71
-        result_dic['features_name'] = ['a','b','c','d','e']
-        result_dic['result'] =[1,2,3,4,5,5.5,3,4,7.8]
-        result_dic['features_value'] = [[1,2,3,4,5],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2]]
+    result_dic['type'] = '回归' if model_method[2] == '1' else '分类'
+    if result_dic['type']=='回归':
         return render_template('train_result.html', result=result_dic)
-    elif (result_dic['type'] == '分类'):
+    elif result_dic['type'] == '分类':
+        result_dic['type']='分类'
         fault_list = ['传感器子系统','CPU','电路板','外部执行器','内部执行器']
         class_number = len(fault_list)
         result_dic['heatmap']=[]
@@ -93,30 +92,26 @@ def train_result(model_method):
         result_dic['accuracy'] = 0.7
         result_dic['precision'] = 0.83
         result_dic['recall'] = 0.71
-
-
         return render_template('train_result.html', result=result_dic)
 
 @app.route('/test_result/<model_method>')
 def test_result(model_method):
+    result_dic = {}
         #model_method=[模型序号,方法序号]
     print(model_method)
-
-    result_dic={}
+    result_dic['train_loss'] = [8.8, 8.6, 5.4, 6.2, 3.6, 4.2, 3.8, 2.1, 1.1]
+    result_dic['accuracy'] = 0.7
+    result_dic['precision'] = 0.83
+    result_dic['recall'] = 0.71
+    result_dic['features_name'] = ['a','b','c','d','e']
+    result_dic['result'] =[1,2,3,4,5,5.5,3,4,7.8]
+    result_dic['features_value'] = [[1,2,3,4,5],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2]]
+    result_dic['type'] = '回归' if model_method[2] == '1' else '分类'
     # 得到结果数据
-
     # 判断结果是分类还是回归
-    result_dic['type']='分类'
-    if(result_dic['type']=='回归'):
-        result_dic['train_loss'] = [8.8, 8.6, 5.4, 6.2, 3.6, 4.2, 3.8, 2.1, 1.1]
-        result_dic['accuracy'] = 0.7
-        result_dic['precision'] = 0.83
-        result_dic['recall'] = 0.71
-        result_dic['features_name'] = ['a','b','c','d','e']
-        result_dic['result'] =[1,2,3,4,5,5.5,3,4,7.8]
-        result_dic['features_value'] = [[1,2,3,4,5],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2],[5,4,3,2,1],[3,5,4,2,1],[3,5,4,1,2],[4,1,5,3,2]]
+    if result_dic['type']=='回归':
         return render_template('test_result.html',result=result_dic)
-    elif (result_dic['type'] == '分类'):
+    elif result_dic['type']=='分类':
         return redirect(url_for('regression_test'))
     
 

@@ -14,6 +14,7 @@ body {
   	vertical-align: middle;
   	margin:0 auto;
 }
+
 .gitlabel {
     background-color: #ffecaa;
     border-radius: 3px;
@@ -23,6 +24,13 @@ body {
     white-space: nowrap;
     color: #000;
 }
+
+.navbar-nav li{
+  width:150px;
+  margin:0 10px;
+  display:inline-block;
+}
+
 p {
   font-family: "Titillium Web", sans-serif;
   color: #000000;
@@ -55,6 +63,7 @@ figure {
 
 a {
   transition: all .3s ease-in 0s;
+  color: inherit;
 }
 
 iframe {
@@ -62,11 +71,14 @@ iframe {
 }
 
 a, a:focus, a:hover {
+  background-color: inherit;
   text-decoration: none;
   outline: 0;
+  color: inherit;
 }
 
 a:focus, a:hover {
+  background-color:inherit;
   color: #f0326b;
 }
 
@@ -485,6 +497,7 @@ a:focus, a:hover {
 
 .commonTab .nav-tabs .nav-item {
   margin: 0 3px;
+  display:inline-block;
 }
 
 .commonTab .nav-tabs .nav-item .nav-link {
@@ -576,15 +589,16 @@ a:focus, a:hover {
 }
 
 .navigation .navbar-nav > li > a:hover, .navigation .navbar-nav > li > a:active, .navigation .navbar-nav > li > a:focus {
-  background: none;
+  background-color: inherit;
   color: #f0326b;
 }
 
 .navigation .navbar-toggler {
-  color: #fff;
+  color: rgb(65, 61, 61);
   font-size: 30px;
   cursor: pointer;
   outline: none;
+  float:right;
 }
 
 .navigation .nav .open > a {
